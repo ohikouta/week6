@@ -30,7 +30,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
-        source: "build/*"
+        source: "build/**"  
         target: "/home/ec2-user/deploy"
 
     - name: Deploy files to Apache directory via SSH
@@ -42,6 +42,6 @@ jobs:
         script: |
           echo "success"
           sudo rm -rf /var/www/html/*
-          sudo cp -r /home/ec2-user/deploy/* /var/www/html/
+          sudo cp -r /home/ec2-user/deploy/. /var/www/html/  
           sudo chmod -R o+rx /var/www/html/static
           sudo systemctl restart httpd
