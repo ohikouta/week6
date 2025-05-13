@@ -43,4 +43,5 @@ jobs:
           echo "success"
           sudo rm -rf /var/www/html/*
           sudo cp -r /home/ec2-user/deploy/* /var/www/html/
+          sudo chmod -R o+rx /var/www/html/static
           sudo systemctl restart httpd
