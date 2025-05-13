@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App" style={{ textAlign: 'center', paddingTop: '50px' }}>
       <h1>くじ引きアプリ</h1>
-      <P>これは変更</P>
+      <p>これは変更</p>
       {result ? (
         <>
           <h2>結果: {result} 🎉</h2>
