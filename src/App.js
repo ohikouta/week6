@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App" style={{ textAlign: 'center', paddingTop: '50px' }}>
       <h1>くじ引きアプリ</h1>
-      <p>GithubActionsで自動デプロイ設定しましたー</p>
+      <p>GithubActionsで自動デプロイ設定しましたーよ</p>
       {result ? (
         <>
           <h2>結果: {result} 🎉</h2>
