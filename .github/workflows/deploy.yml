@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2s
 
 on:
   push:
@@ -27,19 +27,45 @@ jobs:
     - name: Archive build directory
       run: tar -czf build.tar.gz build
 
-    - name: Copy tar.gz to EC2
+    # === EC2インスタンス1 にデプロイ ===
+    - name: Copy tar.gz to EC2 #1
       uses: appleboy/scp-action@master
       with:
-        host: ${{ secrets.EC2_HOST }}
+        host: ${{ secrets.EC2_HOST_1 }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         source: "build.tar.gz"
         target: "/home/ec2-user/"
 
-    - name: Extract and deploy on EC2
+    - name: Extract and deploy on EC2 #1
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.EC2_HOST }}
+        host: ${{ secrets.EC2_HOST_1 }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          rm -rf /home/ec2-user/deploy
+          mkdir -p /home/ec2-user/deploy
+          tar -xzf /home/ec2-user/build.tar.gz -C /home/ec2-user/deploy
+          sudo rm -rf /var/www/html/*
+          sudo cp -r /home/ec2-user/deploy/build/. /var/www/html/
+          sudo chmod -R o+rx /var/www/html/static
+          sudo systemctl restart httpd
+
+    # === EC2インスタンス2 にデプロイ ===
+    - name: Copy tar.gz to EC2 #2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST_2 }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "build.tar.gz"
+        target: "/home/ec2-user/"
+
+    - name: Extract and deploy on EC2 #2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST_2 }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         script: |
